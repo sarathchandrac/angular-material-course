@@ -3,6 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {MatTableDataSource} from '@angular/material';
 import {Course} from '../model/course';
 import {CoursesService} from '../services/courses.service';
+import {LessonsDatasource} from '../services/lessons.datasource';
 
 
 @Component({
@@ -13,7 +14,7 @@ import {CoursesService} from '../services/courses.service';
 export class CourseComponent implements OnInit, AfterViewInit {
 
     course: Course;
-    dataSource = new MatTableDataSource([]);
+    dataSource: LessonsDatasource;
 
     displayedColumns = ['seqNo', 'description', 'duration'];
 
@@ -25,14 +26,11 @@ export class CourseComponent implements OnInit, AfterViewInit {
     ngOnInit() {
 
         this.course = this.route.snapshot.data['course'];
-        this.coursesService.findAllCourseLessons(this.course.id)
-            .subscribe((lessons => this.dataSource.data = lessons));
 
+        this.dataSource = new LessonsDatasource(this.coursesService);
+        this.dataSource.loadLessons(this.course.id, '', 'asc', 0, 3);
     }
 
-    searchLessons(search = '') {
-        this.dataSource.filter = search.toLowerCase().trim();
-    }
 
     ngAfterViewInit() {
 
