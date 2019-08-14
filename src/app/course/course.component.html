@@ -7,6 +7,9 @@
     <mat-form-field>
         <input matInput placeholder="Search lessons" #input (keyup)="searchLessons(input.value)">
     </mat-form-field>
+    <div class="spinner-container" *ngIf="dataSource.loading$ | async">
+        <mat-spinner></mat-spinner>
+    </div>
     <mat-table [dataSource]="dataSource" class="lessons-table mat-elevation-z8">
         <ng-container matColumnDef="seqNo">
             <mat-header-cell *matHeaderCellDef>#</mat-header-cell>
@@ -24,6 +27,7 @@
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
     </mat-table>
+    <mat-paginator [length]="course?.lessonsCount" [pageSize]="3" [pageSizeOptions]="[3,5,10]"></mat-paginator>
 
 </div>
 
